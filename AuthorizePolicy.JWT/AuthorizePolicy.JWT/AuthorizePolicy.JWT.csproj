@@ -9,6 +9,7 @@
     <RepositoryUrl>https://github.com/axzxs2001/AuthorizePolicy</RepositoryUrl>
     <RepositoryType>git</RepositoryType>
     <PackageTags>Policy,Authorize.JWT</PackageTags>
+    <Authors>桂素伟</Authors>
   </PropertyGroup>
 
   <ItemGroup>
