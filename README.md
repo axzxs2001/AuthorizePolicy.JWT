@@ -54,16 +54,6 @@ A custome policy of authorize standard library for asp.net core 2.0
         
 ###### PermissionController.cs
 
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Authorization;
-using System.Security.Claims;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.AspNetCore.Authentication;
-using AuthorizePolicy.JWT;
-
-namespace Token_WebAPI01.Controllers
-{
     [Authorize("Permission")]
     public class PermissionController : Controller
     {
@@ -111,9 +101,6 @@ namespace Token_WebAPI01.Controllers
                 Message = "你无权限访问"
             });
         }
-    }
-}
-
 ###### HomeController
 
     [Authorize(Policy = "Permission")]
