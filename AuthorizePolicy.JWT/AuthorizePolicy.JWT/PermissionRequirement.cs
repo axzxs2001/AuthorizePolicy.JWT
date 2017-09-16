@@ -22,7 +22,7 @@ namespace AuthorizePolicy.JWT
         /// <summary>
         /// 认证授权类型
         /// </summary>
-        public string ClaimType{ internal get; set; } 
+        public string ClaimType { internal get; set; }
         /// <summary>
         /// 请求路径
         /// </summary>
@@ -39,7 +39,9 @@ namespace AuthorizePolicy.JWT
         /// 过期时间
         /// </summary>
         public TimeSpan Expiration { get; set; } = TimeSpan.FromMinutes(5000);
-
+        /// <summary>
+        /// 签名验证
+        /// </summary>
         public SigningCredentials SigningCredentials { get; set; }
 
         /// <summary>
@@ -47,7 +49,17 @@ namespace AuthorizePolicy.JWT
         /// </summary>
         /// <param name="deniedAction">无权限action</param>
         /// <param name="userPermissions">用户权限集合</param>
-        public PermissionRequirement(string deniedAction, List<Permission> permissions, string claimType,string issuer,string audience, SigningCredentials signingCredentials)
+
+        /// <summary>
+        /// 构造
+        /// </summary>
+        /// <param name="deniedAction">拒约请求的url</param>
+        /// <param name="permissions">权限集合</param>
+        /// <param name="claimType">声明类型</param>
+        /// <param name="issuer">发行人</param>
+        /// <param name="audience">订阅人</param>
+        /// <param name="signingCredentials">签名验证实体</param>
+        public PermissionRequirement(string deniedAction, List<Permission> permissions, string claimType, string issuer, string audience, SigningCredentials signingCredentials)
         {
             ClaimType = claimType;
             DeniedAction = deniedAction;

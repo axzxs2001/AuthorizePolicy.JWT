@@ -10,6 +10,9 @@ namespace Token_WebAPI01.Test
 {
     class Program
     {
+        /// <summary>
+        /// 访问Url
+        /// </summary>
         static string _url = "http://localhost:39286";
         static void Main(string[] args)
         {
@@ -34,13 +37,11 @@ namespace Token_WebAPI01.Test
                     case "4":
                         AdminInvock(token);
                         break;
-
                 }
                 stopwatch.Stop();
                 TimeSpan timespan = stopwatch.Elapsed;
                 Console.WriteLine($"间隔时间：{timespan.TotalSeconds}");
             }
-
         }
         static dynamic NullLogin()
         {
