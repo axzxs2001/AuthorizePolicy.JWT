@@ -28,6 +28,7 @@ namespace AuthorizePolicy.JWT.Test
      
         public void ConfigureServices(IServiceCollection services)
         {
+            //读取配置文件
             var audienceConfig = Configuration.GetSection("Audience");
             var symmetricKeyAsBase64 = audienceConfig["Secret"];
             var keyByteArray = Encoding.ASCII.GetBytes(symmetricKeyAsBase64);
