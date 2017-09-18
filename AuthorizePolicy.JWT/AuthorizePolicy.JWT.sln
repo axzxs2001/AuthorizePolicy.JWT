@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
 VisualStudioVersion = 15.0.26730.15
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizePolicy.JWT", "AuthorizePolicy.JWT\AuthorizePolicy.JWT.csproj", "{B4C0D05D-3882-4E64-B841-2C86E8405ADA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizePolicy.JWT", "AuthorizePolicy.JWT\AuthorizePolicy.JWT.csproj", "{B4C0D05D-3882-4E64-B841-2C86E8405ADA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "AuthorizePolicy.JWT.Test", "AuthorizePolicy.JWT.Test\AuthorizePolicy.JWT.Test.csproj", "{C18D3EF7-AA1C-43F8-AC51-62FED08DF3F3}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizePolicy.JWT.Test", "AuthorizePolicy.JWT.Test\AuthorizePolicy.JWT.Test.csproj", "{C18D3EF7-AA1C-43F8-AC51-62FED08DF3F3}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Client.Test", "Client.Test\Client.Test.csproj", "{2387BB0B-FF12-41C2-80B9-5ADE13D90988}"
 EndProject
