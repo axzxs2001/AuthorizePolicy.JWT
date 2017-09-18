@@ -7,6 +7,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using AuthorizePolicy.JWT;
 using Microsoft.AspNetCore.Cors;
+using System.Threading.Tasks;
 
 namespace Token_WebAPI01.Controllers
 {
@@ -24,8 +25,8 @@ namespace Token_WebAPI01.Controllers
         }
         [AllowAnonymous]
         [HttpPost("/api/login")]
-        public IActionResult Login(string username,string password,string role)
-        { 
+        public IActionResult Login(string username, string password, string role)
+        {
             var isValidated = username == "gsw" && password == "111111";
             if (!isValidated)
             {
@@ -36,18 +37,24 @@ namespace Token_WebAPI01.Controllers
                 });
             }
             else
-            { 
+            {
                 //如果是基于角色的授权策略，这里要添加用户;如果是基于角色的授权策略，这里要添加角色
-                var claims =new Claim[]{ new Claim(ClaimTypes.Name, username),new Claim(ClaimTypes.Role, role) };
+                var claims = new Claim[] { new Claim(ClaimTypes.Name, username), new Claim(ClaimTypes.Role, role) };
                 //用户标识
-                var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme); 
+                var identity = new ClaimsIdentity(JwtBearerDefaults.AuthenticationScheme);
                 identity.AddClaims(claims);
-                //登录
-                HttpContext.SignInAsync(JwtBearerDefaults.AuthenticationScheme, new ClaimsPrincipal(identity));
+             
                 var token = JwtToken.BuildJwtToken(claims, _requirement);
                 return new JsonResult(token);
             }
         }
+
+        [HttpPost("/api/logout")]
+        public  IActionResult Logout()
+        {
+            return Ok();
+        }
+
         [AllowAnonymous]
         [HttpGet("/api/denied")]
         public IActionResult Denied()

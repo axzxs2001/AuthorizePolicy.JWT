@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
@@ -11,7 +12,7 @@ namespace AuthorizePolicy.JWT
     /// 权限授权Handler
     /// </summary>
     public class PermissionHandler : AuthorizationHandler<PermissionRequirement>
-    {    
+    {
         /// <summary>
         /// 验证方案提供对象
         /// </summary>
@@ -28,16 +29,17 @@ namespace AuthorizePolicy.JWT
         public PermissionHandler(IAuthenticationSchemeProvider schemes)
         {
             Schemes = schemes;
-        }   
+        }
 
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
         {
+          
             ////赋值用户权限       
             Requirement = requirement;
             //从AuthorizationHandlerContext转成HttpContext，以便取出表求信息
             var httpContext = (context.Resource as Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext).HttpContext;
             //请求Url
-            var questUrl = httpContext.Request.Path.Value.ToLower();  
+            var questUrl = httpContext.Request.Path.Value.ToLower();
             //判断请求是否停止
             var handlers = httpContext.RequestServices.GetRequiredService<IAuthenticationHandlerProvider>();
             foreach (var scheme in await Schemes.GetRequestHandlerSchemesAsync())
@@ -57,6 +59,7 @@ namespace AuthorizePolicy.JWT
                 //result?.Principal不为空即登录成功
                 if (result?.Principal != null)
                 {
+                
                     httpContext.User = result.Principal;
                     //权限中是否存在请求的url
                     if (Requirement.Permissions.GroupBy(g => g.Url).Where(w => w.Key.ToLower() == questUrl).Count() > 0)
@@ -80,7 +83,7 @@ namespace AuthorizePolicy.JWT
                 context.Fail();
                 return;
             }
-            context.Succeed(requirement);     
+            context.Succeed(requirement);
         }
     }
 }

@@ -13,6 +13,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using System.IdentityModel.Tokens.Jwt;
 
 namespace AuthorizePolicy.JWT.Test
 {
@@ -25,11 +26,9 @@ namespace AuthorizePolicy.JWT.Test
 
         public IConfiguration Configuration { get; }
 
-     
+
         public void ConfigureServices(IServiceCollection services)
         {
-           // services.AddCors();
-
             var urls = "http://localhost:39287/";
             services.AddCors(options =>
             options.AddPolicy("MyDomain",
@@ -75,7 +74,18 @@ namespace AuthorizePolicy.JWT.Test
             {
                 //不使用https
                 o.RequireHttpsMetadata = false;
-                o.TokenValidationParameters = tokenValidationParameters;
+                o.TokenValidationParameters = tokenValidationParameters;        
+                o.Events = new JwtBearerEvents
+                {
+                    OnTokenValidated = context =>
+                    {
+                        if (context.Request.Path.Value.ToString() == "/api/logout")
+                        {
+                            var token = ((context as TokenValidatedContext).SecurityToken as JwtSecurityToken).RawData;
+                        }
+                        return Task.CompletedTask;
+                    }
+                };
             });
             //注入授权Handler
             services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
@@ -89,9 +99,7 @@ namespace AuthorizePolicy.JWT.Test
             {
                 app.UseDeveloperExceptionPage();
             }
-
             app.UseCors("AllowSameDomain");
-
             app.UseMvc();
         }
     }

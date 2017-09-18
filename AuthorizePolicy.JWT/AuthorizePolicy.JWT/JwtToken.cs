@@ -28,14 +28,14 @@ namespace AuthorizePolicy.JWT
                 signingCredentials: permissionRequirement.SigningCredentials
             );
             var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-            var response = new
+            var responseJson = new
             {
                 Status = true,
                 access_token = encodedJwt,
                 expires_in = permissionRequirement.Expiration.TotalMilliseconds,
                 token_type = "Bearer"
             };
-            return response;
+            return responseJson;
         }
     }
 }

@@ -13,13 +13,13 @@ namespace Token_WebAPI01.Test
         /// <summary>
         /// 访问Url
         /// </summary>
-        static string _url = "http://localhost:39286";
+        static string _url = "http://localhost:39287";
         static void Main(string[] args)
         {
             dynamic token = null;
             while (true)
             {
-                Console.WriteLine("1、登录【admin】 2、登录【system】 3、登录【错误用户名密码】 4、查询数据 ");
+                Console.WriteLine("1、登录【admin】 2、登录【system】 3、登录【错误用户名密码】 4、查询数据  5、注销");
                 var mark = Console.ReadLine();
                 var stopwatch = new Stopwatch();
                 stopwatch.Start();
@@ -37,11 +37,25 @@ namespace Token_WebAPI01.Test
                     case "4":
                         AdminInvock(token);
                         break;
+                    case "5":
+                        Logout(token);
+                        break;
                 }
                 stopwatch.Stop();
                 TimeSpan timespan = stopwatch.Elapsed;
                 Console.WriteLine($"间隔时间：{timespan.TotalSeconds}");
             }
+        }
+        static void Logout(dynamic token)
+        {
+            var client = new RestClient(_url);
+            //这里要在获取的令牌字符串前加Bearer
+            string tk = "Bearer " + Convert.ToString(token?.access_token);
+            client.AddDefaultHeader("Authorization", tk);
+            var request = new RestRequest("/api/logout", Method.POST);
+            IRestResponse response = client.Execute(request);
+            var content = response.Content;
+            Console.WriteLine($"状态：{response.StatusCode}  返回结果：{content}");
         }
         static dynamic NullLogin()
         {
