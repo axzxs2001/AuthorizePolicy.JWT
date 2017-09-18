@@ -4,11 +4,13 @@ using System.Linq;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Cors;
 
 namespace AuthorizePolicy.JWT.Test.Controllers
 {
     [Authorize("Permission")]
     [Route("api/[controller]")]
+    [EnableCors("MyDomain")]
     public class ValuesController : Controller
     {
         // GET api/values

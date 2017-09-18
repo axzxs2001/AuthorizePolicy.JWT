@@ -28,6 +28,13 @@ namespace AuthorizePolicy.JWT.Test
      
         public void ConfigureServices(IServiceCollection services)
         {
+           // services.AddCors();
+
+            var urls = "http://localhost:39287/";
+            services.AddCors(options =>
+            options.AddPolicy("MyDomain",
+        builder => builder.WithOrigins(urls).AllowAnyMethod().AllowAnyHeader().AllowAnyOrigin().AllowCredentials()));
+
             //读取配置文件
             var audienceConfig = Configuration.GetSection("Audience");
             var symmetricKeyAsBase64 = audienceConfig["Secret"];
@@ -82,6 +89,8 @@ namespace AuthorizePolicy.JWT.Test
             {
                 app.UseDeveloperExceptionPage();
             }
+
+            app.UseCors("AllowSameDomain");
 
             app.UseMvc();
         }

@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authentication;
 using AuthorizePolicy.JWT;
+using Microsoft.AspNetCore.Cors;
 
 namespace Token_WebAPI01.Controllers
 {
     [Authorize("Permission")]
+    [EnableCors("MyDomain")]
     public class PermissionController : Controller
     {
         /// <summary>
