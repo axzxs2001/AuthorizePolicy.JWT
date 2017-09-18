@@ -1,0 +1,106 @@
+﻿<!DOCTYPE html>
+
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8" />
+    <title></title>
+    <script src="js/jquery.min.js"></script>
+    <script src="js/bootstrap.min.js"></script>
+    <link href="css/bootstrap.min.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+                <input class="btn btn-primary" type="button" id="adminlogin" value="admin登录" />
+            </div>
+            <div class="col-md-3">
+                <input class="btn btn-primary" type="button" id="systemlogin" value="system登录" />
+            </div>
+            <div class="col-md-3">
+                <input class="btn btn-primary" type="button" id="errorlogin" value="error username登录" />
+            </div>
+            <div class="col-md-3">
+                <input class="btn btn-primary" type="button" id="getvalues" value="获取Values" />
+            </div>
+        </div>
+  
+        <script>
+            var token;
+            $(function () {
+                $("#adminlogin").click(function () {
+
+                    $.ajax({
+                        url: "http://localhost:39287/api/login",
+                        dataType: 'json',
+                        type: 'post',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: { username: "gsw", password: "111111", role: "admin" },
+                        success: function (result) {
+                            console.log(result);
+                            token = result.access_token;
+                        }
+                    });
+                })
+            })
+            $(function () {
+                $("#systemlogin").click(function () {
+                    $.ajax({
+                        url: "http://localhost:39287/api/login",
+                        dataType: 'json',
+                        type: 'post',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: { username: "gsw", password: "111111", role: "system" },
+                        success: function (result) {
+                            console.log(result);
+                            token = result.access_token;
+                        }
+                    });
+                })
+            })
+            $(function () {
+                $("#errorlogin").click(function () {
+                    $.ajax({
+                        url: "http://localhost:39287/api/login",
+                        dataType: 'json',
+                        type: 'post',
+                        xhrFields: {
+                            withCredentials: true
+                        },
+                        data: { username: "gswaa", password: "111111", role: "admin" },
+                        success: function (result) {
+                            console.log(result);
+                            token = result.access_token;
+                        }
+                    });
+                })
+            })
+
+            $("#getvalues").click(function () {
+                $.ajax({
+                    url: "http://localhost:39287/api/values",
+                    dataType: 'json',
+                    type: 'get',
+                    beforeSend: function (xhr) {
+                        xhr.setRequestHeader("Authorization", "Bearer " + token);
+                    },
+                    xhrFields: {
+                        withCredentials: true
+                    },
+                    cache: false,
+                    success: function (result) {
+                        console.log(result);
+                    }
+                });
+            })
+
+        </script>
+
+
+    </div>
+</body>
+</html>
