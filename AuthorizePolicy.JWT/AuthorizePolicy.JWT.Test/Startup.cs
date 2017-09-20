@@ -23,10 +23,7 @@ namespace AuthorizePolicy.JWT.Test
         {
             Configuration = configuration;
         }
-
         public IConfiguration Configuration { get; }
-
-
         public void ConfigureServices(IServiceCollection services)
         {
             var urls = "http://localhost:39287/";
@@ -39,7 +36,6 @@ namespace AuthorizePolicy.JWT.Test
             var symmetricKeyAsBase64 = audienceConfig["Secret"];
             var keyByteArray = Encoding.ASCII.GetBytes(symmetricKeyAsBase64);
             var signingKey = new SymmetricSecurityKey(keyByteArray);
-
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
@@ -48,7 +44,7 @@ namespace AuthorizePolicy.JWT.Test
                 ValidIssuer = audienceConfig["Issuer"],
                 ValidateAudience = true,
                 ValidAudience = audienceConfig["Audience"],
-                ValidateLifetime = true,
+               ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero
             };
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
@@ -91,8 +87,6 @@ namespace AuthorizePolicy.JWT.Test
             services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
             services.AddMvc();
         }
-
-
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
             if (env.IsDevelopment())
