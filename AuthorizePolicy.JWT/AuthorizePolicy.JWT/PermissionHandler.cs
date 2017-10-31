@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.Extensions.DependencyInjection;
 using System;
 using System.Linq;
+using System.Security.Claims;
 using System.Threading.Tasks;
 
 namespace AuthorizePolicy.JWT
@@ -72,7 +73,15 @@ namespace AuthorizePolicy.JWT
                             httpContext.Response.Redirect(requirement.DeniedAction);
                         }
                     }
-                    context.Succeed(requirement);
+                    //判断过期时间
+                    if (DateTime.Parse(httpContext.User.Claims.SingleOrDefault(s => s.Type == ClaimTypes.Expiration).Value) >= DateTime.Now)
+                    {
+                        context.Succeed(requirement);
+                    }
+                    else
+                    {
+                        context.Fail();
+                    }
                     return;
                 }
             }

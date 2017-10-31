@@ -38,7 +38,7 @@ namespace AuthorizePolicy.JWT
         /// <summary>
         /// 过期时间
         /// </summary>
-        public TimeSpan Expiration { get; set; } = TimeSpan.FromMinutes(5000);
+        public TimeSpan Expiration { get; set; }
         /// <summary>
         /// 签名验证
         /// </summary>
@@ -59,13 +59,14 @@ namespace AuthorizePolicy.JWT
         /// <param name="issuer">发行人</param>
         /// <param name="audience">订阅人</param>
         /// <param name="signingCredentials">签名验证实体</param>
-        public PermissionRequirement(string deniedAction, List<Permission> permissions, string claimType, string issuer, string audience, SigningCredentials signingCredentials)
+        public PermissionRequirement(string deniedAction, List<Permission> permissions, string claimType, string issuer, string audience, SigningCredentials signingCredentials, TimeSpan expiration)
         {
             ClaimType = claimType;
             DeniedAction = deniedAction;
             Permissions = permissions;
             Issuer = issuer;
             Audience = audience;
+            Expiration = expiration;
             SigningCredentials = signingCredentials;
         }
     }

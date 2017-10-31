@@ -41,11 +41,13 @@ namespace AuthorizePolicy.JWT.Test
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = signingKey,
                 ValidateIssuer = true,
-                ValidIssuer = audienceConfig["Issuer"],
+                ValidIssuer = audienceConfig["Issuer"],//发行人
                 ValidateAudience = true,
-                ValidAudience = audienceConfig["Audience"],
-               ValidateLifetime = true,
-                ClockSkew = TimeSpan.Zero
+                ValidAudience = audienceConfig["Audience"],//订阅人
+                ValidateLifetime = true,         
+                ClockSkew = TimeSpan.Zero,
+                RequireExpirationTime = true,
+                
             };
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
             services.AddAuthorization(options =>
@@ -58,9 +60,18 @@ namespace AuthorizePolicy.JWT.Test
                               new Permission {  Url="/api/values1", Name="system"}
                           };
                 //如果第三个参数，是ClaimTypes.Role，上面集合的每个元素的Name为角色名称，如果ClaimTypes.Name，即上面集合的每个元素的Name为用户名
-                var permissionRequirement = new PermissionRequirement("/api/denied", permission, ClaimTypes.Role, audienceConfig["Issuer"], audienceConfig["Audience"], signingCredentials);
+                var permissionRequirement = new PermissionRequirement(
+                    "/api/denied", permission,
+                    ClaimTypes.Role,
+                    audienceConfig["Issuer"],
+                    audienceConfig["Audience"],
+                    signingCredentials,
+                    expiration:TimeSpan.FromSeconds(10)
+                    );
+
                 options.AddPolicy("Permission",
                           policy => policy.Requirements.Add(permissionRequirement));
+
             }).AddAuthentication(options =>
             {
                 options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
