@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 15
-VisualStudioVersion = 15.0.26730.15
+VisualStudioVersion = 15.0.27004.2005
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthorizePolicy.JWT", "AuthorizePolicy.JWT\AuthorizePolicy.JWT.csproj", "{B4C0D05D-3882-4E64-B841-2C86E8405ADA}"
 EndProject

@@ -18,12 +18,12 @@
     },
     "AuthorizePolicy.JWT.Test": {
       "commandName": "Project",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "api/values",
       "environmentVariables": {
         "ASPNETCORE_ENVIRONMENT": "Development"
       },
-      "applicationUrl": "http://localhost:39287/"
+      "applicationUrl": "http://localhost:5000/"
     }
   }
 }

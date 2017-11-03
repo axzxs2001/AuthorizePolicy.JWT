@@ -13,7 +13,7 @@ namespace Token_WebAPI01.Test
         /// <summary>
         /// 访问Url
         /// </summary>
-        static string _url = "http://localhost:39287";
+        static string _url = "http://localhost:5000";
         static void Main(string[] args)
         {
             dynamic token = null;
