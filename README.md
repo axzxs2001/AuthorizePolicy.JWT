@@ -62,9 +62,9 @@ A custome policy of authorize standard library for asp.net core 2.0
         /// 自定义策略参数
         /// </summary>
         PermissionRequirement _requirement;
-        public PermissionController(IAuthorizationHandler authorizationHander)
+        public PermissionController(PermissionRequirement requirement)
         {
-            _requirement = (authorizationHander as PermissionHandler).Requirement;
+            _requirement = requirement;
         }
         [AllowAnonymous]
         [HttpPost("/api/login")]
