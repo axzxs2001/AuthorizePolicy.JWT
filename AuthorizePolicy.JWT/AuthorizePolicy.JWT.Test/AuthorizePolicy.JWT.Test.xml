@@ -1,0 +1,13 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>AuthorizePolicy.JWT.Test</name>
+    </assembly>
+    <members>
+        <member name="F:Token_WebAPI01.Controllers.PermissionController._requirement">
+            <summary>
+            自定义策略参数
+            </summary>
+        </member>
+    </members>
+</doc>

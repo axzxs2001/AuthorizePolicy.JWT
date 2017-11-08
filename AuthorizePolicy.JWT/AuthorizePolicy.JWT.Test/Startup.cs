@@ -14,6 +14,10 @@ using System.Security.Claims;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using System.IdentityModel.Tokens.Jwt;
+using System.IO;
+using Microsoft.Azure.KeyVault.Models;
+using Swashbuckle.AspNetCore.Swagger;
+using Microsoft.Extensions.PlatformAbstractions;
 
 namespace AuthorizePolicy.JWT.Test
 {
@@ -97,6 +101,25 @@ namespace AuthorizePolicy.JWT.Test
             //注入授权Handler
             services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
             services.AddMvc();
+
+            services.AddSwaggerGen(c =>
+            {
+                c.SwaggerDoc("v1", new Info
+                {
+                    Title = "AuthorizePolicy.JWT测试Web API",
+                    Version = "v1",
+                    Description = "AuthorizePolicy.JWT测试Web API ",
+                    TermsOfService = "None",
+                    Contact = new Swashbuckle.AspNetCore.Swagger.Contact
+                    {
+                        Name = "桂素伟",
+                        Email = "axzxs2001@163.com"
+                    },
+                });
+                var filePath = Path.Combine(PlatformServices.Default.Application.ApplicationBasePath, "AuthorizePolicy.JWT.Test.xml");
+                c.IncludeXmlComments(filePath);
+                c.CustomSchemaIds((type) => type.FullName);
+            });
         }
         public void Configure(IApplicationBuilder app, IHostingEnvironment env)
         {
@@ -106,6 +129,18 @@ namespace AuthorizePolicy.JWT.Test
             }
             app.UseCors("AllowSameDomain");
             app.UseMvc();
+            app.UseSwagger(c =>
+            {
+                c.PreSerializeFilters.Add((swaggerDoc, httpReq) => swaggerDoc.Host = httpReq.Host.Value);
+                c.RouteTemplate = "docs/{documentName}/swagger.json";
+            });
+            app.UseSwaggerUI(c =>
+            {
+                c.RoutePrefix = "docs";
+                c.SwaggerEndpoint("/docs/v1/swagger.json", "AuthorizePolicy.JWT测试Web API");
+                c.InjectStylesheet("/swagger-ui/custom.css");
+                c.InjectOnCompleteJavaScript("/swagger-ui/custom.js");
+            });
         }
     }
 }
