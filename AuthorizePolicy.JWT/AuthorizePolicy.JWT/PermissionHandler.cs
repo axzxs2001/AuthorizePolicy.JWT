@@ -18,11 +18,7 @@ namespace AuthorizePolicy.JWT
         /// 验证方案提供对象
         /// </summary>
         public IAuthenticationSchemeProvider Schemes { get; set; }
-        /// <summary>
-        /// 自定义策略参数
-        /// </summary>
-        public PermissionRequirement Requirement
-        { get; set; }
+
         /// <summary>
         /// 构造
         /// </summary>
@@ -35,8 +31,6 @@ namespace AuthorizePolicy.JWT
         protected override async Task HandleRequirementAsync(AuthorizationHandlerContext context, PermissionRequirement requirement)
         {
           
-            ////赋值用户权限       
-            Requirement = requirement;
             //从AuthorizationHandlerContext转成HttpContext，以便取出表求信息
             var httpContext = (context.Resource as Microsoft.AspNetCore.Mvc.Filters.AuthorizationFilterContext).HttpContext;
             //请求Url
@@ -63,11 +57,11 @@ namespace AuthorizePolicy.JWT
                 
                     httpContext.User = result.Principal;
                     //权限中是否存在请求的url
-                    if (Requirement.Permissions.GroupBy(g => g.Url).Where(w => w.Key.ToLower() == questUrl).Count() > 0)
+                    if (requirement.Permissions.GroupBy(g => g.Url).Where(w => w.Key.ToLower() == questUrl).Count() > 0)
                     {
                         var name = httpContext.User.Claims.SingleOrDefault(s => s.Type == requirement.ClaimType).Value;
                         //验证权限
-                        if (Requirement.Permissions.Where(w => w.Name == name && w.Url.ToLower() == questUrl).Count() <= 0)
+                        if (requirement.Permissions.Where(w => w.Name == name && w.Url.ToLower() == questUrl).Count() <= 0)
                         {
                             //无权限跳转到拒绝页面
                             httpContext.Response.Redirect(requirement.DeniedAction);
@@ -86,7 +80,7 @@ namespace AuthorizePolicy.JWT
                 }
             }
             //判断没有登录时，是否访问登录的url,并且是Post请求，并且是form表单提交类型，否则为失败
-            if (!questUrl.Equals(Requirement.LoginPath.ToLower(), StringComparison.Ordinal) && (!httpContext.Request.Method.Equals("POST")
+            if (!questUrl.Equals(requirement.LoginPath.ToLower(), StringComparison.Ordinal) && (!httpContext.Request.Method.Equals("POST")
                || !httpContext.Request.HasFormContentType))
             {
                 context.Fail();

@@ -48,30 +48,30 @@ namespace AuthorizePolicy.JWT.Test
                 ValidIssuer = audienceConfig["Issuer"],//发行人
                 ValidateAudience = true,
                 ValidAudience = audienceConfig["Audience"],//订阅人
-                ValidateLifetime = true,         
+                ValidateLifetime = true,
                 ClockSkew = TimeSpan.Zero,
                 RequireExpirationTime = true,
-                
+
             };
             var signingCredentials = new SigningCredentials(signingKey, SecurityAlgorithms.HmacSha256);
-            services.AddAuthorization(options =>
-            {
-                //这个集合模拟用户权限表,可从数据库中查询出来
-                var permission = new List<Permission> {
+            //这个集合模拟用户权限表,可从数据库中查询出来
+            var permission = new List<Permission> {
                               new Permission {  Url="/", Name="admin"},
                               new Permission {  Url="/api/values", Name="admin"},
                               new Permission {  Url="/", Name="system"},
                               new Permission {  Url="/api/values1", Name="system"}
                           };
-                //如果第三个参数，是ClaimTypes.Role，上面集合的每个元素的Name为角色名称，如果ClaimTypes.Name，即上面集合的每个元素的Name为用户名
-                var permissionRequirement = new PermissionRequirement(
-                    "/api/denied", permission,
-                    ClaimTypes.Role,
-                    audienceConfig["Issuer"],
-                    audienceConfig["Audience"],
-                    signingCredentials,
-                    expiration:TimeSpan.FromSeconds(10)
-                    );
+            //如果第三个参数，是ClaimTypes.Role，上面集合的每个元素的Name为角色名称，如果ClaimTypes.Name，即上面集合的每个元素的Name为用户名
+            var permissionRequirement = new PermissionRequirement(
+                "/api/denied", permission,
+                ClaimTypes.Role,
+                audienceConfig["Issuer"],
+                audienceConfig["Audience"],
+                signingCredentials,
+                expiration: TimeSpan.FromSeconds(10)
+                );
+            services.AddAuthorization(options =>
+            {
 
                 options.AddPolicy("Permission",
                           policy => policy.Requirements.Add(permissionRequirement));
@@ -85,7 +85,7 @@ namespace AuthorizePolicy.JWT.Test
             {
                 //不使用https
                 o.RequireHttpsMetadata = false;
-                o.TokenValidationParameters = tokenValidationParameters;        
+                o.TokenValidationParameters = tokenValidationParameters;
                 o.Events = new JwtBearerEvents
                 {
                     OnTokenValidated = context =>
@@ -100,6 +100,7 @@ namespace AuthorizePolicy.JWT.Test
             });
             //注入授权Handler
             services.AddSingleton<IAuthorizationHandler, PermissionHandler>();
+            services.AddSingleton(permissionRequirement);
             services.AddMvc();
 
             services.AddSwaggerGen(c =>
