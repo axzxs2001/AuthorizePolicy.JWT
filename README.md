@@ -3,7 +3,7 @@ A custome policy of authorize standard library for asp.net core 2.0
 
 #### Usage：
 ###### Starup.cs
-···C#
+```C#
         public void ConfigureServices(IServiceCollection services)
         {
             //读取配置文件
@@ -53,7 +53,7 @@ A custome policy of authorize standard library for asp.net core 2.0
             services.AddSingleton(permissionRequirement);
             services.AddMvc();
         }
-```        
+```      
 ###### PermissionController.cs
 
     [Authorize("Permission")]
